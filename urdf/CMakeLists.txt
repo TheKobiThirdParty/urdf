@@ -12,7 +12,7 @@ find_package(TinyXML REQUIRED)
 
 # Find version components
 if(NOT urdfdom_headers_VERSION)
-set(urdfdom_headers_VERSION "0.0.0")
+  set(urdfdom_headers_VERSION "0.0.0")
 endif()
 string(REGEX REPLACE "^([0-9]+).*" "\\1" URDFDOM_HEADERS_MAJOR_VERSION "${urdfdom_headers_VERSION}")
 string(REGEX REPLACE "^[0-9]+\\.([0-9]+).*" "\\1" URDFDOM_HEADERS_MINOR_VERSION "${urdfdom_headers_VERSION}")
@@ -27,7 +27,7 @@ catkin_package(
   LIBRARIES ${PROJECT_NAME}
   INCLUDE_DIRS include ${CATKIN_DEVEL_PREFIX}/include
   CATKIN_DEPENDS rosconsole_bridge roscpp
-  DEPENDS urdfdom_headers urdfdom Boost TinyXML
+  DEPENDS pluginlib urdfdom_headers urdfdom Boost TinyXML
 )
 install(FILES ${generated_compat_header} DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
@@ -45,6 +45,10 @@ link_directories(${Boost_LIBRARY_DIRS} ${catkin_LIBRARY_DIRS})
 add_library(${PROJECT_NAME} src/model.cpp src/rosconsole_bridge.cpp)
 target_link_libraries(${PROJECT_NAME} ${TinyXML_LIBRARIES} ${catkin_LIBRARIES} ${urdfdom_LIBRARIES})
 
+if(WIN32)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE "URDF_BUILDING_LIBRARY")
+endif()
+
 if(APPLE)
   set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
 endif(APPLE)
@@ -60,7 +64,7 @@ endif()
 # no idea how CATKIN does this
 # rosbuild_add_rostest(${PROJECT_SOURCE_DIR}/test/test_robot_model_parser.launch)
 
-install(TARGETS ${PROJECT_NAME} 
+install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

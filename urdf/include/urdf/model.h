@@ -34,11 +34,11 @@
 
 /* Author: Wim Meeussen */
 
-#ifndef URDF_MODEL_H
-#define URDF_MODEL_H
+#ifndef URDF__MODEL_H_
+#define URDF__MODEL_H_
 
 #include <string>
-#include <map>
+
 #include <urdf_model/model.h>
 #include <urdf/urdfdom_compatibility.h>
 #include <tinyxml.h>
@@ -46,27 +46,32 @@
 #include <boost/weak_ptr.hpp>
 #include <ros/ros.h>
 
-namespace urdf{
+#include "urdf/visibility_control.hpp"
 
-class Model: public ModelInterface
+namespace urdf
+{
+
+class Model : public ModelInterface
 {
 public:
   /// \brief Load Model from TiXMLElement
-  bool initXml(TiXmlElement *xml);
+  URDF_EXPORT bool initXml(TiXmlElement * xml);
   /// \brief Load Model from TiXMLDocument
-  bool initXml(TiXmlDocument *xml);
+  URDF_EXPORT bool initXml(TiXmlDocument * xml);
   /// \brief Load Model given a filename
-  bool initFile(const std::string& filename);
+  URDF_EXPORT bool initFile(const std::string & filename);
   /// \brief Load Model given the name of a parameter on the parameter server
-  bool initParam(const std::string& param);
-  /// \brief Load Model given the name of a parameter on the parameter server using provided nodehandle
-  bool initParamWithNodeHandle(const std::string& param, const ros::NodeHandle& nh = ros::NodeHandle());
+  URDF_EXPORT bool initParam(const std::string & param);
+  /// \brief Load Model given the name of parameter on parameter server using provided nodehandle
+  URDF_EXPORT bool initParamWithNodeHandle(const std::string & param,
+    const ros::NodeHandle & nh = ros::NodeHandle());
   /// \brief Load Model from a XML-string
-  bool initString(const std::string& xmlstring);
+  URDF_EXPORT bool initString(const std::string & xmlstring);
 };
 
-// shared_ptr declarations moved to urdf/urdfdom_compatibility.h to allow for std::shared_ptrs in latest version
+// shared_ptr declarations moved to urdf/urdfdom_compatibility.h to allow for
+// std::shared_ptrs in latest version
 
-}
+}  // namespace urdf
 
-#endif
+#endif  // URDF__MODEL_H_
